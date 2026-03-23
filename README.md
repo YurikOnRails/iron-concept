@@ -1,16 +1,14 @@
-# Titan Core
+# IRON
 
 **A new philosophy for industrial automation.**
 
 > Industrial software has not meaningfully evolved in 30 years.
-> Titan Core is a rethinking — not an improvement — of how modern factories
+> IRON is a rethinking — not an improvement — of how modern factories
 > should be built, controlled, and understood.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Status: Concept](https://img.shields.io/badge/status-concept-blue.svg)]()
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
-
-**[English](#the-problem) | [Русский](#проблема)**
 
 ---
 
@@ -30,7 +28,7 @@ This is not a niche problem. This is the global standard.
 The world's factories run on software that would be unacceptable in any other domain.
 We accept it because "that's how industrial software works."
 
-**Titan Core rejects this premise.**
+**IRON rejects this premise.**
 
 ---
 
@@ -46,7 +44,7 @@ This means:
 - A hardware failure that triggers automatic recovery, not a 3am phone call
 - A system that costs $20,000 to deploy, not $200,000
 
-Titan Core is the architectural blueprint for this factory.
+IRON is the architectural blueprint for this factory.
 
 ---
 
@@ -74,11 +72,11 @@ Configuration, time-series, alarms, users, permissions — one engine, one query
 
 ### IV. The developer and the engineer are equal
 
-The automation engineer with 20 years of PLC experience who knows nothing about React is not less valuable than the developer who knows Rust and nothing about Modbus. Titan Core serves both. Three levels of entry, one underlying system.
+The automation engineer with 20 years of PLC experience who knows nothing about React is not less valuable than the developer who knows Rust and nothing about Modbus. IRON serves both. Three levels of entry, one underlying system.
 
 ### V. Open is not optional
 
-Industrial software that is closed-source, licensed per tag, and requires a certified partner for installation is not just expensive — it is fragile. When the vendor raises prices or goes bankrupt, the factory is hostage. Titan Core is MIT-licensed. Fork it. Own it. Run it forever.
+Industrial software that is closed-source, licensed per tag, and requires a certified partner for installation is not just expensive — it is fragile. When the vendor raises prices or goes bankrupt, the factory is hostage. IRON is MIT-licensed. Fork it. Own it. Run it forever.
 
 ---
 
@@ -112,7 +110,7 @@ graph TD
 | **Message Broker** | NATS JetStream | Single binary, 30MB RAM, at-least-once, hierarchical topics |
 | **Time-Series DB** | TimescaleDB | PostgreSQL-compatible + 8–12x compression + continuous aggregates |
 | **Backend** | Elixir / Phoenix | Erlang VM: GenServer per tag, 2M WebSocket connections, supervision trees |
-| **Frontend** | React + TypeScript | Mainstream, SVG-native, strong typing for tag binding |
+| **Frontend** | Phoenix LiveView + React island | LiveView handles 90% (real-time UI, state sync, WebSocket); React for SVG mimic editor only |
 | **PLC Programming** | CODESYS / TwinCAT 3 | IEC 61131-3 ST, Git-friendly, VS Code integration |
 
 ---
@@ -136,24 +134,24 @@ An operator viewing a pump station screen receives updates for the 50–200 tags
 
 ```bash
 # Create a new process object — generates all scaffolding
-titan generate object reactor_01
+iron generate object reactor_01
 
 # Add a tag
-titan tag add reactor_01.temperature \
+iron tag add reactor_01.temperature \
   --source modbus://plc-01/holding/0x1000 \
   --type float32 --unit "°C" --deadband 0.5
 
 # Simulate without real hardware
-titan simulate reactor_01 --temperature "sine:20:180:60s"
+iron simulate reactor_01 --temperature "sine:20:180:60s"
 
 # Validate configuration
-titan validate
+iron validate
 # ✅ 47 tags valid
 # ⚠️  reactor_01.flow — no alarm limits defined
 # ❌ pump_02.status — source unreachable
 
 # Deploy to edge device
-titan deploy --target edge-01
+iron deploy --target edge-01
 # Compiling Rust agent... done
 # Uploading config... done
 # ✅ 47 tags active, real data flowing
@@ -169,7 +167,7 @@ The pieces exist. NATS, TimescaleDB, Elixir, Rust — all mature and production-
 
 Nobody has assembled it into one cohesive, open, deployable system. Why?
 
-**The cultural gap.** People who understand OT — PLC scan cycles, Modbus edge cases, why you cannot run Nmap in a production plant — rarely know modern software architecture. People who know Rust and Elixir rarely have factory floor experience. Titan Core requires both. That intersection is small.
+**The cultural gap.** People who understand OT — PLC scan cycles, Modbus edge cases, why you cannot run Nmap in a production plant — rarely know modern software architecture. People who know Rust and Elixir rarely have factory floor experience. IRON requires both. That intersection is small.
 
 **Conservative buyers are rational.** A plant that runs is not touched. The entry point is greenfield projects and forward-thinking integrators.
 
@@ -197,7 +195,7 @@ Phase 4 — Ecosystem     (months 12–18) IEC 62443 · Partner program · v1.0
 Each percentage point of OEE (Overall Equipment Effectiveness) at a $15M/year plant represents ~$120k in additional profit. Modern SCADA with real-time visibility and predictive analytics contributes +5–15% OEE. Payback period: 3–6 months.
 
 Traditional SCADA deployment: $150–300k, 18–24 months payback.
-Titan Core deployment: $20–50k, 3–6 months payback.
+IRON deployment: $20–50k, 3–6 months payback.
 
 The ROI argument is not subtle. See [Economic Impact](docs/economics.md).
 
@@ -213,21 +211,22 @@ The ROI argument is not subtle. See [Economic Impact](docs/economics.md).
 
 ---
 
-## Проблема
+## RFCs
 
-Зайди на любой промышленный завод сегодня и ты найдёшь систему управления из 1990-х, работающую на Windows XP, без контроля версий, с historian-базой которая отдаёт тренд за неделю за три минуты — и счёт на $200,000 за всё это.
+Architecture decisions, philosophy, and business model are documented as RFCs:
 
-Titan Core — это переосмысление. Не улучшение существующего — переосмысление с нуля того, каким должен быть современный завод.
-
-**Открытый исходный код. Современный стек. Доступная цена. Без vendor lock-in.**
-
-Полная документация на русском: [docs/ru/](docs/ru/)
+| RFC | Title | Summary |
+|---|---|---|
+| [0001](rfcs/0001-vision.md) | Vision | What IRON is, why it exists, what winning looks like |
+| [0002](rfcs/0002-architecture.md) | Architecture | iron-core, iron-web, edge deployment, protocol roadmap |
+| [0003](rfcs/0003-dx-philosophy.md) | DX Philosophy | `iron new`, 5 minutes to first dashboard, DX manifesto |
+| [0004](rfcs/0004-business-model.md) | Business Model | Open core tiers, pricing philosophy, IndustrialPROFI |
 
 ---
 
 ## Contributing
 
-Titan Core is in the concept phase. The most valuable contributions right now are not pull requests — they are conversations.
+IRON is in the concept phase. The most valuable contributions right now are not pull requests — they are conversations.
 
 - **Challenge the architecture** — open an Issue, argue a better approach
 - **Share domain expertise** — what does this get wrong from your factory floor experience?
@@ -244,6 +243,6 @@ MIT — own it, fork it, deploy it, build a business on it.
 
 ---
 
-*Titan Core is a concept born from a simple belief: the tools to build better industrial software finally exist. Someone just needs to put them together.*
+*IRON is a concept born from a simple belief: the tools to build better industrial software finally exist. Someone just needs to put them together.*
 
 *If you share that belief — welcome.*

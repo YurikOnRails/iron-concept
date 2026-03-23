@@ -1,6 +1,6 @@
-# Contributing to Titan Core
+# Contributing to IRON
 
-Titan Core is in the **concept and architecture phase**.
+IRON is in the **concept and architecture phase**.
 There is no code yet. This is intentional.
 
 Code written without architectural conviction becomes technical debt on day one.
@@ -63,14 +63,14 @@ This architecture has real challenges. Document them, don't hide them.
 Resist adding components.
 
 **Both audiences.** Every decision should consider both the automation engineer
-who does not know React and the developer who does not know Modbus.
+who does not know Elixir and the developer who does not know Modbus.
 
 ---
 
 ## Language
 
 Issues, PRs, and discussions in English or Russian are both welcome.
-When Titan Core has code, it will use English identifiers and comments.
+When IRON has code, it will use English identifiers and comments.
 Documentation is maintained in both languages.
 
 ---
@@ -78,7 +78,7 @@ Documentation is maintained in both languages.
 ## Code of conduct
 
 Be respectful. Domain experts and software generalists often talk past each other.
-The goal of Titan Core is to bridge that gap.
+The goal of IRON is to bridge that gap.
 
 If you are a developer: the automation engineer has seen failure modes
 that would never occur to you. Listen first.

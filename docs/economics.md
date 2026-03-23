@@ -37,7 +37,7 @@ OEE improvement is nearly pure margin.
 ```
 Annual revenue:          $15M
 Current OEE:             62%
-After Titan Core:         72% (+10 percentage points)
+After IRON:         72% (+10 percentage points)
 Additional revenue:      ~$1.5M/year
 
 Implementation cost:     $30–50k (our stack)
