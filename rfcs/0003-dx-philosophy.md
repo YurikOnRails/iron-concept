@@ -187,7 +187,7 @@ IRON makes the dangerous thing hard and the auditable thing easy.
 | Rust edge agent | ✅ | ❌ | ❌ | ❌ |
 | Developer docs quality | RFC-level | Poor | Poor | Good |
 | Community | Growing | Inactive | Small | Large |
-| Open source license | MIT | GPL | MIT | Proprietary |
+| Open source license | Apache 2.0 | GPL | MIT | Proprietary |
 
 ---
 

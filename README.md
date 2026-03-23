@@ -6,7 +6,7 @@
 > IRON is a rethinking — not an improvement — of how modern factories
 > should be built, controlled, and understood.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Status: Concept](https://img.shields.io/badge/status-concept-blue.svg)]()
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
@@ -39,7 +39,7 @@ A factory should be as observable, reliable, and maintainable as the best softwa
 This means:
 - Every configuration change tracked in Git with author, timestamp, and reason
 - A developer productive on day one — without learning a proprietary tool
-- An automation engineer productive on day one — without learning React
+- An automation engineer productive on day one — without learning Elixir
 - Sensor data visible in a browser anywhere in the world in under 100ms
 - A hardware failure that triggers automatic recovery, not a 3am phone call
 - A system that costs $20,000 to deploy, not $200,000
@@ -76,7 +76,7 @@ The automation engineer with 20 years of PLC experience who knows nothing about 
 
 ### V. Open is not optional
 
-Industrial software that is closed-source, licensed per tag, and requires a certified partner for installation is not just expensive — it is fragile. When the vendor raises prices or goes bankrupt, the factory is hostage. IRON is MIT-licensed. Fork it. Own it. Run it forever.
+Industrial software that is closed-source, licensed per tag, and requires a certified partner for installation is not just expensive — it is fragile. When the vendor raises prices or goes bankrupt, the factory is hostage. IRON is Apache 2.0 licensed. Fork it. Own it. Run it forever.
 
 ---
 
@@ -84,16 +84,22 @@ Industrial software that is closed-source, licensed per tag, and requires a cert
 
 ```mermaid
 graph TD
-    PLC["PLCs & Sensors\nModbus TCP/RTU · OPC-UA · IO-Link"]
-    EDGE["Rust Edge Agent\nDeadband filter · Local buffer · DQ validation"]
-    NATS["NATS JetStream\n10M+ msg/sec · At-least-once · Replay"]
-    TSDB["TimescaleDB\n8–12x compression · Continuous aggregates · Full SQL"]
-    ALARM["Alarm Engine\nRules · Dedup · Escalation"]
-    PHOENIX["Elixir / Phoenix\nGenServer per tag · 2M WebSocket · Auto-recovery"]
-    HMI["Web HMI\nVisual editor · SVG mimics · Live trends"]
+    subgraph iron-core ["iron-core (Rust)"]
+        EDGE["Edge Agent\nModbus · OPC-UA · S7 · MQTT\nDeadband · Buffer · WASM modules"]
+        TSDB["Historian\nTimescaleDB · 8–12x compression\nContinuous aggregates · Full SQL"]
+        ALARM["Alarm Engine\nRules · Dedup · Escalation"]
+    end
 
-    PLC -->|Modbus / OPC-UA| EDGE
-    EDGE -->|NATS publish| NATS
+    subgraph iron-web ["iron-web (Phoenix / LiveView)"]
+        PHOENIX["LiveView\nGenServer per tag · 2M WebSocket\nReal-time diffs · Auto-recovery"]
+        HMI["Web UI\nDashboards · Trends · Alarms\nSVG editor (React island)"]
+    end
+
+    PLC["PLCs & Sensors\nModbus TCP/RTU · OPC-UA · S7 · IO-Link"]
+    NATS["NATS JetStream\n10M+ msg/sec · At-least-once · Replay"]
+
+    PLC -->|protocols| EDGE
+    EDGE -->|publish| NATS
     NATS --> TSDB
     NATS --> ALARM
     NATS --> PHOENIX
@@ -221,6 +227,10 @@ Architecture decisions, philosophy, and business model are documented as RFCs:
 | [0002](rfcs/0002-architecture.md) | Architecture | iron-core, iron-web, edge deployment, protocol roadmap |
 | [0003](rfcs/0003-dx-philosophy.md) | DX Philosophy | `iron new`, 5 minutes to first dashboard, DX manifesto |
 | [0004](rfcs/0004-business-model.md) | Business Model | Open core tiers, pricing philosophy, IndustrialPROFI |
+| [0005](rfcs/0005-security.md) | Security | READ/WRITE separation, IEC 62443, NIS2 compliance |
+
+**Supporting docs:**
+[Economic Impact](docs/economics.md) · [Hardware Reference](docs/hardware.md)
 
 ---
 
@@ -239,7 +249,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-MIT — own it, fork it, deploy it, build a business on it.
+Apache 2.0 — own it, fork it, deploy it, build a business on it.
 
 ---
 

@@ -81,7 +81,7 @@ Industrial software that is closed-source, licensed per tag, and requires a cert
 partner for installation is not just expensive — it is a hostage situation.
 When the vendor raises prices or goes bankrupt, the factory is trapped.
 
-IRON is MIT-licensed. Fork it. Own it. Run it forever.
+IRON is Apache 2.0 licensed. Fork it. Own it. Run it forever.
 
 ---
 

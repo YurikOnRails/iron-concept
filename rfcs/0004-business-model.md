@@ -9,7 +9,7 @@
 
 IRON is free for the vast majority of users. The core runtime, all protocol drivers,
 the web UI, the historian, the alarm engine — everything you need to run a real plant
-is open source under the MIT license. No feature flags. No telemetry. No "community edition."
+is open source under the Apache 2.0 license. No feature flags. No telemetry. No "community edition."
 
 The paid tier exists for enterprises that need features that only make sense at scale:
 multi-site management, SSO, SLA-backed support, compliance reporting. These features
@@ -35,7 +35,7 @@ This is the Grafana model. This is the GitLab model. It works.
 | **WASM custom modules** | ✅ | ✅ |
 | **Unlimited tags** | ✅ | ✅ |
 | **Self-hosted** | ✅ | ✅ |
-| **MIT license** | ✅ | — |
+| **Apache 2.0 license** | ✅ | — |
 | **Multi-site management** | — | ✅ |
 | **Enterprise SSO (SAML, LDAP)** | — | ✅ |
 | **Cloud historian (managed)** | — | ✅ |
@@ -206,3 +206,66 @@ IRON project:
 The integrator who builds on IRON owns the client relationship completely.
 There is no vendor between them and the client.
 That is a fundamentally different business.
+
+---
+
+## License Decision: Apache 2.0
+
+IRON is licensed under Apache 2.0. This was a deliberate choice with explicit trade-offs.
+
+### Why not MIT
+
+MIT is simpler but provides no patent grant. Apache 2.0 includes an explicit patent
+license from every contributor — important when enterprise legal departments review
+dependencies. For a project targeting industrial deployments where patent litigation
+is a real risk, the patent clause matters.
+
+### Why not AGPL v3
+
+AGPL is the obvious choice if your primary fear is a large company forking your project,
+closing the source, and competing with you. That fear is legitimate — but for IRON
+specifically, it is not the primary risk:
+
+- The industrial automation market is niche and requires deep OT expertise.
+  AWS is not going to offer managed SCADA.
+- IRON's enterprise value is in support, SLA, and enterprise features —
+  not in the core runtime. A fork of the runtime is not a threat to the business.
+- Enterprise customers in IRON's target markets (CIS, Southeast Asia, Latin America)
+  are more likely to be blocked by AGPL legal policies than Western enterprises.
+  AGPL creates friction exactly where IRON needs adoption.
+- Every successful open-core company at scale uses a permissive license for the core:
+  Grafana (Apache 2.0), GitLab (MIT), Metabase (AGPL — but they have VC backing
+  to sustain the friction). IRON is bootstrapped. Friction is expensive.
+
+### Why not dual-license (Apache + commercial)
+
+Dual-licensing (the Qt/MariaDB model) is a strong option and remains available
+as a future path. It requires:
+
+1. A Contributor License Agreement (CLA) from every contributor, giving IRON
+   the right to relicense their code. Without this, dual-licensing is legally impossible.
+2. A legal entity to hold the commercial license.
+3. A sales process for the commercial license.
+
+These are not impossible, but they are overhead that doesn't make sense at concept phase.
+If a large company forks IRON and competes directly — that is when dual-licensing
+becomes worth the overhead.
+
+### When this decision should be revisited
+
+Revisit the license if:
+- A well-funded competitor forks IRON and offers a hosted service without contributing back
+- The enterprise tier gains significant traction and a commercial license would
+  generate meaningful revenue (>$500k ARR)
+- The contributor base grows large enough that a CLA process is manageable
+
+Until then: Apache 2.0 maximizes adoption, minimizes legal friction, and keeps
+the focus on building the product rather than managing licensing complexity.
+
+### What Apache 2.0 means in practice
+
+- **Farmers and SMEs:** use IRON forever, free, with no conditions beyond attribution
+- **System integrators:** build commercial services on top of IRON without restriction
+- **Enterprises:** deploy self-hosted IRON without legal review issues
+- **Contributors:** their contributions are protected by the explicit patent grant
+- **Competitors:** can fork, but cannot remove attribution; patent grant is irrevocable
