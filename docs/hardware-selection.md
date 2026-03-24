@@ -118,16 +118,28 @@ Production deployment, but small enough that one device is acceptable.
 - **Guaranteed production until January 2036** — KUNBUS has manufactured
   Revolution Pi since 2016. Component lifecycle commitment is real
 
-**Nerves on RevPi Connect 5:**
+**Two deployment strategies for RevPi Connect 5:**
 
-Elixir Nerves firmware compiles directly for CM5. You get:
-- Immutable OS image that boots in 5–10 seconds
-- OTA updates with A/B partition scheme — if new firmware fails, automatic rollback
-- No SD card corruption — eMMC on CM5 with proper wear leveling
-- Full isolation from filesystem-level problems of standard Raspberry Pi setups
+IRON supports two deployment approaches for edge devices. Choose based on your needs:
+
+| | Docker + Kamal (default) | Nerves firmware (advanced) |
+|---|---|---|
+| **How it works** | Standard Linux + Docker containers | Immutable firmware image, no OS |
+| **Setup** | `iron deploy --target edge` | Custom Nerves project, `mix firmware` |
+| **Updates** | `iron deploy` (Kamal, zero-downtime) | OTA with A/B partition rollback |
+| **Best for** | Most deployments, familiar tooling | Harsh environments, maximum reliability |
+| **Requires** | Docker on the device | Nerves expertise |
+
+**Docker + Kamal** is the default and recommended path. It uses the same deployment
+tooling as the rest of IRON (see [Deployment Guide](deployment.md)).
+
+**Nerves** is the advanced option for environments where filesystem corruption,
+SD card wear, or boot reliability are critical concerns. Nerves compiles
+iron-core + iron-web into an immutable firmware image that boots in 5–10 seconds
+with automatic rollback on failure.
 
 ```yaml
-# IRON deployment target: RevPi Connect 5
+# Docker + Kamal deployment (default)
 servers:
   edge:
     hosts:
@@ -136,7 +148,7 @@ servers:
     options:
       network: host     # direct OT network access
 
-# iron-web runs on same device at Level 2
+# At Level 2, iron-web can run on same device
   web:
     - 192.168.10.5
 ```

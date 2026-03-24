@@ -191,28 +191,29 @@ in an unfamiliar domain. A community that needs exactly his skills.
 
 ## What Winning Looks Like
 
-### Year 1
+### Year 1 (Phases 0–2)
 
 - `iron new` works end-to-end on a Raspberry Pi in under 10 minutes
 - Modbus TCP/RTU and OPC-UA drivers are production-quality
-- 5 real deployments at real plants (not demos)
-- 50 GitHub stars from people who understand what they're looking at
+- First production installation at a real plant with a documented case study
+- 2,000+ GitHub stars from people who understand what they're looking at
+- 3–5 regular external contributors
 
-### Year 2
+### Year 2 (Phase 3)
 
 - 3 system integrators using IRON as their primary platform
-- 100 plants running IRON in production
-- iron-web visual editor: you can build a working dashboard without writing code
 - First enterprise customer on the paid tier
+- iron-web visual editor: you can build a working dashboard without writing code
+- Active community of 50+ members in 5+ countries
 
-### Year 5
+### Year 3–5 (Phase 4+)
 
 - IRON is the default choice for new industrial automation projects in CIS markets
-- 1,000+ plants in production
+- 50+ production installations, growing to 1,000+
 - A community of "Ironworkers" — integrators, engineers, and developers
   who have built careers around the platform
-- Open source contribution from integrators in 10+ countries
-- Paid tier generating enough revenue to fund 3–5 full-time contributors
+- 100+ contributors from 10+ countries
+- $100,000+ ARR, funding 3–5 full-time contributors
 
 ### What "Ignition did it" means for IRON
 

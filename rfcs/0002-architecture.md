@@ -26,8 +26,6 @@ IRON has a two-layer architecture with a clear boundary between runtime and inte
 │  • Data quality: GOOD / UNCERTAIN / BAD                         │
 │  • Local SQLite buffer — survives network loss                   │
 │  • WASM modules — custom logic without recompiling the agent     │
-│                                                                  │
-│  Tag Engine · Alarm Engine · Historian (TimescaleDB)             │
 └───────────────────────────┬─────────────────────────────────────┘
                             │ NATS JetStream
                             │ topic: plant.line1.reactor1.temperature
@@ -36,6 +34,8 @@ IRON has a two-layer architecture with a clear boundary between runtime and inte
 │                                                                  │
 │  • Real-time dashboards — LiveView, no JavaScript required       │
 │  • SVG mimic editor — React island (escape hatch for canvas UI)  │
+│  • Tag Engine · Alarm Engine (GenServer per tag)                  │
+│  • Historian — TimescaleDB (PostgreSQL + time-series)            │
 │  • REST API · GraphQL · WebSocket                                │
 │  • User management · RBAC · Audit log                            │
 │  • Integrator tools · Configuration interface                    │
@@ -77,9 +77,12 @@ The agent keeps polling, keeps buffering, keeps enforcing limits locally.
 **WASM modules:** custom logic (unit conversions, derived tags, custom protocols) can be
 deployed as WASM modules without recompiling the agent binary.
 
-### Tag Engine
+### Tag Configuration
 
-Tags are the core abstraction. A tag maps a physical signal to a named value in the system:
+Tags are the core abstraction. A tag maps a physical signal to a named value in the system.
+The edge agent reads tag definitions from YAML and uses them to configure polling,
+deadband filtering, and data quality. The tag values are published to NATS where
+iron-web's Tag Engine (GenServer per tag) processes them further:
 
 ```yaml
 reactor_01:
@@ -117,10 +120,23 @@ reactor_01:
 
 This is the READ/WRITE separation made concrete in the filesystem.
 
+---
+
+## iron-web (Phoenix / LiveView)
+
+The interface layer. Runs on the server (cloud or on-premise). Responsible for
+everything between the message broker and the human.
+
+### Tag Engine and Alarm Engine
+
+Tag and alarm processing runs as Elixir GenServer processes inside iron-web.
+Each tag is a lightweight GenServer (~2KB RAM) that receives updates from NATS,
+evaluates alarm rules, broadcasts to LiveView subscribers, and writes to the historian.
+
 ### Historian
 
 TimescaleDB (PostgreSQL extension). One database for configuration, time-series,
-alarms, users, and permissions.
+alarms, users, and permissions. Managed by iron-web.
 
 ```
 Traditional approach:          IRON:
@@ -135,13 +151,6 @@ Traditional approach:          IRON:
 A plant with 10,000 tags updating every second generates 315 billion rows/year.
 TimescaleDB handles this with 8–12x compression, continuous aggregates, and
 chunk-based retention. A 30-day trend query returns in 3–8ms.
-
----
-
-## iron-web (Phoenix / LiveView)
-
-The interface layer. Runs on the server (cloud or on-premise). Responsible for
-everything between the message broker and the human.
 
 ### Why LiveView for 90% of the UI
 
@@ -231,9 +240,14 @@ is a leading cause of edge device downtime in industrial environments.
 
 ```
 VLAN 10 (OT): PLCs, sensors, I/O modules — isolated
-VLAN 20 (IT): Edge server, uplink to NATS
-Firewall rule: OT → IT allowed (edge agent publishes)
+VLAN 20 (IT): NATS, TimescaleDB, iron-web server
+Firewall rule: OT → IT allowed (edge agent initiates connection to NATS)
                IT → OT blocked by default (no unsolicited access to PLCs)
+
+Note: the edge agent initiates the TCP connection to NATS (OT → IT).
+Over this established connection, data flows both ways:
+  READ:  agent publishes sensor data to NATS topics
+  WRITE: agent subscribes to command topics, receives authorized commands
 ```
 
 This is the READ path made concrete in network topology.

@@ -60,9 +60,13 @@ The network topology enforces the same separation:
 │  No direct internet access               │
 │  No management from IT zone by default   │
 └──────────────────┬───────────────────────┘
-                   │ One-way: Edge Agent publishes to NATS
-                   │ Firewall rule: OT → IT allowed
-                   │              IT → OT blocked by default
+                   │ Edge Agent initiates connection to NATS (OT → IT)
+                   │ Firewall rule: OT → IT allowed (agent connects out)
+                   │              IT → OT blocked (no unsolicited access)
+                   │
+                   │ Over the established connection:
+                   │   READ:  agent publishes sensor data to NATS
+                   │   WRITE: agent subscribes to command topics on NATS
 ┌──────────────────▼───────────────────────┐
 │  IT Zone (VLAN 20)                       │
 │  Edge server · NATS · TimescaleDB        │
@@ -93,7 +97,7 @@ before a message reaches the NATS write topic.
 
 ### Role-Based Access Control
 
-IRON has three built-in role levels. Roles are assigned per-object, not globally:
+IRON has four built-in role levels. Roles are assigned per-object, not globally:
 
 | Role | Read data | Acknowledge alarms | Send commands | Configure tags | Manage users |
 |---|---|---|---|---|---|

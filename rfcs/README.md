@@ -19,6 +19,7 @@ you have a proposal that is significant enough to deserve discussion before impl
 | [0004](0004-business-model.md) | Business Model | Draft |
 | [0005](0005-security.md) | Security Architecture | Draft |
 | [0006](0006-roadmap.md) | Development and Growth Roadmap | Draft |
+| [0007](0007-visual-system.md) | Visual System Architecture | Draft |
 
 ---
 

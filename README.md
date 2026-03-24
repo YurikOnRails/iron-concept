@@ -141,14 +141,14 @@ Industrial software that is closed-source, licensed per tag, and requires a cert
 
 ```mermaid
 graph TD
-    subgraph iron-core ["iron-core (Rust)"]
+    subgraph iron-core ["iron-core (Rust · Edge)"]
         EDGE["Edge Agent\nModbus · OPC-UA · S7 · MQTT\nDeadband · Buffer · WASM modules"]
-        TSDB["Historian\nTimescaleDB · 8–12x compression\nContinuous aggregates · Full SQL"]
-        ALARM["Alarm Engine\nRules · Dedup · Escalation"]
     end
 
-    subgraph iron-web ["iron-web (Phoenix / LiveView)"]
+    subgraph iron-web ["iron-web (Phoenix / LiveView · Server)"]
         PHOENIX["LiveView\nGenServer per tag · 2M WebSocket\nReal-time diffs · Auto-recovery"]
+        TSDB["Historian\nTimescaleDB · 8–12x compression\nContinuous aggregates · Full SQL"]
+        ALARM["Alarm Engine\nRules · Dedup · Escalation"]
         HMI["Web UI\nDashboards · Trends · Alarms\nSVG editor (React island)"]
     end
 
@@ -157,9 +157,9 @@ graph TD
 
     PLC -->|protocols| EDGE
     EDGE -->|publish| NATS
-    NATS --> TSDB
-    NATS --> ALARM
     NATS --> PHOENIX
+    PHOENIX --> TSDB
+    PHOENIX --> ALARM
     PHOENIX -->|WebSocket| HMI
 ```
 
@@ -293,17 +293,18 @@ Nobody has assembled it into one cohesive, open, deployable system. Why?
 ## Roadmap
 
 ```
-Phase 1 — Foundation    (months 1–4)   Rust agent · NATS · TimescaleDB · Phoenix
-Phase 2 — Interface     (months 5–7)   Visual editor · 20+ widgets · Alarm engine
-Phase 3 — Production    (months 8–11)  HA failover · Security audit · Beta
-Phase 4 — Ecosystem     (months 12–18) IEC 62443 · Partner program · v1.0
+Phase 0 — Foundation    (months 0–2)   RFC documentation · GitHub · Community building
+Phase 1 — Prototype     (months 1–6)   iron new · Modbus TCP · LiveView dashboard · Raspberry Pi
+Phase 2 — First Deploy  (months 6–12)  OPC-UA · TimescaleDB trends · RBAC · First production plant
+Phase 3 — Community     (months 12–24) S7 driver · SVG editor · Enterprise SSO · Plugin system
+Phase 4 — Scale         (year 2–3)     Full protocol suite · 50+ installations · Partner program
 ```
 
 ---
 
 ## Economic Impact
 
-Each percentage point of OEE (Overall Equipment Effectiveness) at a $15M/year plant represents ~$120k in additional profit. Modern SCADA with real-time visibility and predictive analytics contributes +5–15% OEE. Payback period: 3–6 months.
+Each percentage point of OEE (Overall Equipment Effectiveness) at a $15M/year plant represents ~$150k in additional profit. Modern SCADA with real-time visibility and predictive analytics contributes +5–15% OEE. Payback period: 3–6 months.
 
 Traditional SCADA deployment: $150–300k, 18–24 months payback.
 IRON deployment: $20–50k, 3–6 months payback.
@@ -334,6 +335,7 @@ Architecture decisions, philosophy, and business model are documented as RFCs:
 | [0004](rfcs/0004-business-model.md) | Business Model | Open core tiers, pricing philosophy, IndustrialPROFI |
 | [0005](rfcs/0005-security.md) | Security | READ/WRITE separation, IEC 62443, NIS2 compliance |
 | [0006](rfcs/0006-roadmap.md) | Roadmap | Phases 0–4, funding strategy, build-in-public playbook |
+| [0007](rfcs/0007-visual-system.md) | Visual System | Three-layer rendering: widgets, SVG mimics, visual editor |
 
 **Supporting docs:**
 [Deployment Guide](docs/deployment.md) · [Testing Guide](docs/testing.md) · [TDD Guide](docs/tdd.md) · [Spec-Driven Development](docs/spec-driven.md) · [Hardware Selection](docs/hardware-selection.md) · [Hardware Reference](docs/hardware.md) · [Economic Impact](docs/economics.md)

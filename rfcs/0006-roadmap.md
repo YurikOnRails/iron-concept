@@ -125,6 +125,11 @@ and cannot imagine going back.
 
 ---
 
+**Note on phase overlap:** phases are not strictly sequential. Phase 1 coding
+begins in month 1, while Phase 0 promotion continues through month 2.
+Similarly, Phase 2 begins as Phase 1 stabilizes. Milestones define phase
+completion, not calendar dates.
+
 ## 4. Phase 0 — Foundation (Months 0–2)
 
 **Goal:** make IRON findable by the right people before writing a line of code.
@@ -343,7 +348,7 @@ Student projects on real open source tooling are mutually beneficial.
 
 **India:**
 Smart agriculture boom — greenhouse, irrigation, cold storage monitoring.
-Priya's persona (IoT developer building agriculture platform) is a real archetype.
+The IoT developer building an agriculture monitoring platform is a real archetype.
 Engage the Indian Elixir and Rust communities, which are growing fast.
 
 ### Success criteria
@@ -681,7 +686,7 @@ He gave a talk at ElixirConf Brazil in 2027. Three Brazilian integrators are now
 using IRON because they heard him speak. He did not plan to become an open source
 maintainer. He just had a problem and someone responded.
 
-Arman is 27 years old. He submitted his 50th pull request to iron-core last week —
+Daulet is 27 years old. He submitted his 50th pull request to iron-core last week —
 a new Embassy-based firmware for bare-metal sensor nodes. He is one of perhaps
 two hundred people globally who understands both async Rust on microcontrollers
 and industrial automation protocols. He did not have that expertise in 2026.

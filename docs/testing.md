@@ -475,13 +475,14 @@ In IRON, it is a first-class browser workflow with results stored in Git.
 
 ### The two-window workflow
 
-A developer connects a laptop to the cabinet via Ethernet — no operator room,
-no cloud, no VPN. The edge device already runs `iron-web` in field mode.
+A developer connects a laptop to the local server (or directly to the edge device
+running iron-core in field mode). The laptop runs `iron-web` locally or connects
+to the plant's iron-web instance on the IT network.
 
 ```
 Developer opens two browser windows on the same laptop:
 
-  Window 1: http://192.168.10.5/dashboard/reactor_01
+  Window 1: http://192.168.1.100/dashboard/reactor_01
   ┌─────────────────────────────────────────────────┐
   │  SCADA — Reactor 01                             │
   │                                                 │
@@ -493,7 +494,7 @@ Developer opens two browser windows on the same laptop:
   │  "Does the signal make sense in context?"       │
   └─────────────────────────────────────────────────┘
 
-  Window 2: http://192.168.10.5/field
+  Window 2: http://192.168.1.100/field
   ┌─────────────────────────────────────────────────┐
   │  Field Verification        [AI][DI][AO][DO][All]│
   ├───────────────────┬──────┬────────┬──────┬──────┤
