@@ -269,3 +269,128 @@ Tag → browser latency:  5–15ms
 TimescaleDB insert:     ~1M rows/sec (batched)
 30-day trend query:     3–8ms (continuous aggregates)
 ```
+
+---
+
+## Layer 1 — PLC Runtime (Long-Term Vision)
+
+IRON's current scope is SCADA: reading from PLCs, storing, visualizing, alerting.
+The long-term vision is a full automation stack — including the PLC runtime itself.
+
+This is the layer that runs IEC 61131-3 programs (Ladder Diagram, Structured Text,
+Function Block Diagram) and directly controls machines. Today, this layer is owned
+by CODESYS, Siemens TIA Portal, and Rockwell Studio 5000.
+
+### The CODESYS problem
+
+CODESYS is the de-facto open runtime for "independent" PLCs:
+
+```
+Written in C               → memory unsafety, undefined behavior in safety-critical code
+Closed source              → unauditable by the plant that depends on it
+Per-device licensing        → a soft PLC on a $150 PC requires a $300 runtime license
+No WASM target             → programs cannot be simulated without hardware
+Proprietary IDE            → locks engineers into vendor toolchain
+```
+
+IRON can do better on every axis — because Rust exists, WASM exists, and
+the compiler infrastructure is already partially built in open source.
+
+### The strategy: build on plc-lang/rusty, not from scratch
+
+[`plc-lang/rusty`](https://github.com/PLC-lang/rusty) is an existing open source
+IEC 61131-3 compiler written in Rust. It compiles Structured Text and other
+IEC 61131-3 languages to LLVM IR, which can then be compiled to native code for any target.
+
+This is the foundation IRON builds on — not a fork, not from scratch.
+
+```
+IEC 61131-3 Source         IRON adds on top of rusty:
+  .st  (Structured Text)
+  .il  (Instruction List)   → rusty (existing, Apache 2.0)
+  .fbd (Function Block)            │
+                                   │  LLVM IR
+                                   ▼
+                        ┌──────────────────────┐
+                        │   IRON PLC Runtime    │
+                        │                       │
+                        │  Native (x86/ARM64)  │  ← runs on hardware
+                        │  WASM                │  ← iron test --sim
+                        │  Linux PREEMPT_RT    │  ← real-time guarantees
+                        │  iron-core bridge    │  ← tags appear in NATS
+                        └──────────────────────┘
+```
+
+### What this enables
+
+**`iron test --sim`**: compile a Structured Text program to WASM, run it in a
+sandbox with simulated I/O, verify behavior before touching physical hardware.
+This is the PLC equivalent of unit tests — something CODESYS has never had.
+
+```bash
+iron test --sim programs/reactor_control.st
+# ✅ Startup sequence: OK (4.2s simulation)
+# ✅ High temperature alarm: triggered at 182°C (limit: 180)
+# ✅ Emergency shutdown: activated at 197°C (limit: 195)
+# ⚠️  Watchdog timeout: not tested — add simulation scenario
+```
+
+**Linux PREEMPT_RT**: the runtime runs on a standard Linux kernel with the
+PREEMPT_RT patch, achieving <1ms jitter on commodity hardware.
+No proprietary RTOS, no Windows CE, no certification fees for the OS layer.
+
+**Tags as first-class citizens**: when the PLC runtime runs inside iron-core,
+every IEC 61131-3 variable is automatically a tag in the NATS namespace.
+No OPC-UA server, no Modbus gateway — the runtime and the historian are
+the same process.
+
+### The CODESYS comparison
+
+| | CODESYS Runtime | IRON PLC Runtime |
+|---|---|---|
+| Language | C (unsafe) | Rust (memory-safe) |
+| Source | Closed | Apache 2.0 |
+| Per-device license | Yes (~€200–500) | No |
+| WASM simulation | No | Yes |
+| Git-friendly programs | No (binary project files) | Yes (.st text files) |
+| OS | Proprietary or Windows CE | Linux PREEMPT_RT |
+| Integration with historian | Via OPC-UA (separate layer) | Native (same process) |
+
+### Implementation timeline
+
+This is long-term work. The sequence:
+
+```
+Phase 3  — Contribute to plc-lang/rusty upstream
+           Add WASM target
+           Basic iron test --sim for ST programs
+           iron-core bridge: PLC variables → NATS tags
+
+Phase 4  — iron-plc: standalone component
+           Linux PREEMPT_RT scan cycle
+           Hardware-in-the-loop testing
+           Open hardware vendor conversations (Advantech, Kunbus)
+
+Phase 5+ — IEC 61131-3 certification path
+           Hardware-certified soft PLC for safety-adjacent applications
+```
+
+The goal in Phase 3 is not a product — it is a proof of concept that proves
+the ST→WASM pipeline works and that `iron test --sim` is useful to real engineers.
+The product emerges from evidence, not ambition.
+
+### Why this matters beyond IRON
+
+A well-maintained, open source IEC 61131-3 compiler with a WASM target and
+Rust-native runtime is valuable independent of IRON. It unblocks:
+
+- Unit testing for PLC programs (an industry that currently has none)
+- CI/CD pipelines for automation engineers (currently impossible)
+- PLC programming education without hardware
+- A generation of developers who already know Rust but cannot work in automation
+  because the tools are closed
+
+This is the "Linux of PLC runtimes" argument. Linux did not kill UNIX by being
+better marketed. It killed it by being open, composable, and something engineers
+could actually read and contribute to. The PLC runtime market is waiting for
+exactly this.

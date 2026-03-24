@@ -7,13 +7,22 @@
 
 ## What Is IRON?
 
-IRON is an open source industrial automation framework. It replaces SCADA systems that cost
-$15,000–$80,000 in licenses, run on Windows XP, and haven't meaningfully changed since 1998.
+IRON is an open source industrial automation framework — and, in the long term,
+a full automation stack: from the PLC runtime that runs on the factory floor
+to the SCADA server that stores and visualizes the data.
 
-It is not an improvement on existing SCADA. It is a ground-up rethinking of what industrial
-automation software should look like when built with the tools that exist today.
+The immediate scope is SCADA: it replaces systems that cost $15,000–$80,000 in licenses,
+run on Windows XP, and haven't meaningfully changed since 1998.
 
-Tagline: **"Industrial automation, forged in Rust."**
+The long-term scope is the entire stack — including the PLC runtime layer owned today
+by CODESYS, Siemens TIA Portal, and Rockwell. An open source, Rust-native,
+IEC 61131-3 runtime that any engineer can read, audit, and run forever.
+
+It is not an improvement on existing industrial automation software.
+It is a ground-up rethinking of what that software should look like
+when built with the tools that exist today.
+
+Tagline: **"Industrial automation for the rest of us."**
 
 ---
 
@@ -34,6 +43,10 @@ other domain of software engineering:
   last Tuesday at 14:23?" takes 3 minutes because the query optimizer doesn't understand
   time-series data.
 - **$200,000 for software that does less than a modern web application**
+- **CODESYS: the hidden tax at the bottom of the stack** — the de-facto open PLC runtime
+  is written in unsafe C, closed source, requires a per-device license (~€200–500),
+  has no WASM simulation target, and locks programs in binary project files that Git cannot diff.
+  It is not "open" in any meaningful sense. It is just less closed than TIA Portal.
 
 Open source alternatives exist (ScadaBR, RapidSCADA, OpenSCADA). They failed not because
 the idea was wrong — but because developer experience was an afterthought.
@@ -74,6 +87,27 @@ WRITE: Operator → Auth → Audit Log → Command Service → Edge → Machine
 A visualization bug is physically incapable of sending a command to a machine.
 In classical SCADA (WinCC, Wonderware, MasterSCADA), these paths are entangled
 in a single monolith. That is the architectural mistake IRON refuses to make.
+
+### The Linux of PLC Runtimes
+
+Linux did not displace UNIX by being better marketed.
+It displaced UNIX by being open, composable, and something engineers
+could actually read, modify, and contribute to.
+When the source was available, every driver author, university lab, and company
+with specific needs could participate. The proprietary systems couldn't compete
+with that compounding.
+
+The PLC runtime market is in the same position UNIX was in 1991.
+CODESYS is dominant not because it is excellent — but because there is no open alternative
+that takes the problem seriously.
+
+`plc-lang/rusty` (an existing Apache 2.0 IEC 61131-3 compiler in Rust targeting LLVM)
+is the kernel that IRON's PLC runtime will be built on.
+Not from scratch. On the shoulders of work that already exists.
+
+The goal: a Structured Text program should be version-controlled, unit-tested via WASM
+simulation, and deployed to a $150 Linux computer — with no per-device license,
+no proprietary IDE, and no vendor to call when it breaks.
 
 ### Open Is Non-Negotiable
 

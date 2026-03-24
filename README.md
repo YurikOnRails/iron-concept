@@ -1,10 +1,14 @@
 # IRON
 
-**A new philosophy for industrial automation.**
+**Industrial automation for the rest of us.**
 
-> Industrial software has not meaningfully evolved in 30 years.
-> IRON is a rethinking — not an improvement — of how modern factories
-> should be built, controlled, and understood.
+Make professional-grade industrial automation accessible to any engineer, factory,
+or farmer on the planet — without six-figure licenses, Windows-only runtimes,
+or six-month integration projects.
+
+> Inspired by Ruby on Rails. Developer experience is not a feature — it is the foundation.
+> `iron new myplant` produces a working real-time dashboard in under five minutes
+> on any Linux machine, including a Raspberry Pi.
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Status: Concept](https://img.shields.io/badge/status-concept-blue.svg)]()
@@ -29,6 +33,59 @@ The world's factories run on software that would be unacceptable in any other do
 We accept it because "that's how industrial software works."
 
 **IRON rejects this premise.**
+
+---
+
+![IRON Architecture](docs/assets/architecture.svg)
+
+---
+
+## Optimized for Happiness
+
+Rails has a concept: software should be optimized for programmer happiness.
+Industrial automation has never had this. It has been optimized for certification,
+for vendor margins, for backwards compatibility with decisions made in 1995.
+
+IRON is built around a different set of beliefs. They are heretical in the OT world.
+We think they are obviously correct.
+
+**Your configuration belongs in Git.**
+Not in a binary file on one machine. Not in a database only the vendor's tool can read.
+In a text file, in a repository, with history, authors, and diffs.
+When something breaks at 3am, you want to know what changed last Tuesday and who changed it.
+
+**Windows is not required.**
+It never was. It was a choice the industry made in 1995 and never revisited.
+IRON runs on a Raspberry Pi, a $150 mini-PC, or any Linux server.
+The factory floor does not need a Windows license.
+
+**Per-tag licensing is exploitation.**
+You pay more as your factory grows. The software becomes a tax on operational visibility.
+IRON has unlimited tags. Growth is never punished.
+
+**A $150 computer is enough.**
+A Beelink EQ12 with passive cooling handles 50,000 tags.
+A Raspberry Pi handles a greenhouse with 40 sensors.
+The idea that industrial automation requires expensive certified hardware
+is a story vendors tell to protect margins, not reliability.
+
+**You should be able to demo before the client signs.**
+`iron new myplant` + `iron dev` + a laptop.
+A working dashboard with simulated data in five minutes.
+If you cannot show something working before the contract, you are selling faith, not software.
+
+**The automation engineer and the developer deserve equal respect.**
+The engineer who has configured Siemens S7 for 20 years is not less valuable
+than the developer who knows Rust. IRON serves both.
+Neither should have to learn the other's tools to do their job.
+
+**Open source is more trustworthy than a black box.**
+A proprietary SCADA system you cannot inspect is not more secure because it is certified.
+It is less secure because nobody outside the vendor has ever read the code.
+IRON is Apache 2.0. Read it. Audit it. Fork it if you need to.
+
+These are not features. They are the beliefs the architecture is built on.
+If they resonate — you are in the right place.
 
 ---
 
@@ -136,30 +193,78 @@ An operator viewing a pump station screen receives updates for the 50–200 tags
 
 ---
 
+## Convention Over Configuration
+
+IRON knows what a tag looks like. IRON knows what a Modbus connection needs.
+IRON knows what an alarm threshold configuration should contain.
+
+Convention means you write less. Less means less to get wrong — by humans and by AI alike.
+
+```yaml
+# This is all you need to monitor a reactor temperature
+reactor_01:
+  temperature:
+    source: modbus://plc-01/holding/0x1000
+    type: float32
+    unit: "°C"
+    deadband: 0.5
+    alarms:
+      high: { limit: 180, message: "High reactor temperature" }
+      high_high: { limit: 195, action: emergency_shutdown }
+```
+
+IRON generates the dashboard, the trend chart, and the alarm panel from this.
+You write the domain knowledge. IRON handles the infrastructure.
+
+YAML configurations that AI can generate. A Rust runtime that validates them.
+`iron validate` catches what the model missed before anything reaches the plant floor.
+
+---
+
+## Quick Start
+
+```bash
+# 1. New project — scaffolds everything
+iron new myplant && cd myplant
+
+# 2. Run locally with Docker — no PLC, no server, no configuration
+iron dev
+# → http://localhost:4000 in under 2 minutes
+
+# 3. Deploy to your local server (LAN, data stays on-premise)
+iron deploy --target local
+# → Kamal 2 deploys via SSH, zero downtime, SSL optional
+# → Running in under 5 minutes on any Linux machine
+
+# 4. Connect real hardware when ready — one line change
+iron tag add reactor_01.temperature \
+  --source modbus://192.168.10.100/holding/0x1000 \
+  --type float32 --unit "°C"
+```
+
+Local deployment is the default. Your data stays in your network.
+Cloud is one config change away — same command, different IP.
+
+---
+
 ## Developer Experience
 
 ```bash
-# Create a new process object — generates all scaffolding
-iron generate object reactor_01
+# Generate a process object with scaffolding
+iron generate object reactor_01 --template chemical_reactor
 
-# Add a tag
-iron tag add reactor_01.temperature \
-  --source modbus://plc-01/holding/0x1000 \
-  --type float32 --unit "°C" --deadband 0.5
-
-# Simulate without real hardware
+# Simulate without hardware
 iron simulate reactor_01 --temperature "sine:20:180:60s"
 
-# Validate configuration
+# Validate before deploying
 iron validate
 # ✅ 47 tags valid
 # ⚠️  reactor_01.flow — no alarm limits defined
 # ❌ pump_02.status — source unreachable
 
-# Deploy to edge device
+# Deploy to edge agent (Raspberry Pi in OT zone)
 iron deploy --target edge-01
-# Compiling Rust agent... done
-# Uploading config... done
+# → ARM64 image pushed, agent restarted in 4s
 # ✅ 47 tags active, real data flowing
 ```
 
@@ -228,9 +333,10 @@ Architecture decisions, philosophy, and business model are documented as RFCs:
 | [0003](rfcs/0003-dx-philosophy.md) | DX Philosophy | `iron new`, 5 minutes to first dashboard, DX manifesto |
 | [0004](rfcs/0004-business-model.md) | Business Model | Open core tiers, pricing philosophy, IndustrialPROFI |
 | [0005](rfcs/0005-security.md) | Security | READ/WRITE separation, IEC 62443, NIS2 compliance |
+| [0006](rfcs/0006-roadmap.md) | Roadmap | Phases 0–4, funding strategy, build-in-public playbook |
 
 **Supporting docs:**
-[Economic Impact](docs/economics.md) · [Hardware Reference](docs/hardware.md)
+[Deployment Guide](docs/deployment.md) · [Testing Guide](docs/testing.md) · [Economic Impact](docs/economics.md) · [Hardware Reference](docs/hardware.md)
 
 ---
 

@@ -1,0 +1,195 @@
+<svg viewBox="0 0 900 1050" xmlns="http://www.w3.org/2000/svg" style="font-family: system-ui, -apple-system, sans-serif; background: #0d1117;">
+  <defs>
+    <linearGradient id="layer5" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+    <linearGradient id="layer4" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0f3460"/>
+      <stop offset="100%" stop-color="#1a1a6e"/>
+    </linearGradient>
+    <linearGradient id="layer3" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#533483"/>
+      <stop offset="100%" stop-color="#0f3460"/>
+    </linearGradient>
+    <linearGradient id="layer2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#e94560"/>
+      <stop offset="100%" stop-color="#533483"/>
+    </linearGradient>
+    <linearGradient id="layer1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ec4a0f"/>
+      <stop offset="100%" stop-color="#e94560"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="35" text-anchor="middle" font-size="22" font-weight="700" fill="#e0e0e0">IRON — Архитектура "Rails для Промавтоматизации"</text>
+  <text x="450" y="55" text-anchor="middle" font-size="12" fill="#999">Open-Source · Fault-Tolerant · Convention over Configuration</text>
+
+  <!-- LAYER 5: DevOps & CLI -->
+  <rect x="30" y="75" width="840" height="140" rx="12" fill="url(#layer5)" filter="url(#shadow)" opacity="0.95"/>
+  <text x="50" y="100" font-size="11" font-weight="700" fill="#e94560" letter-spacing="2">LAYER 5</text>
+  <text x="140" y="100" font-size="14" font-weight="700" fill="#fff">DevOps &amp; CLI — «iron» command</text>
+
+  <rect x="50" y="112" width="160" height="45" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)"/>
+  <text x="130" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#4fc3f7">iron new my_plant</text>
+  <text x="130" y="148" text-anchor="middle" font-size="9" fill="#aaa">Генератор проекта</text>
+
+  <rect x="220" y="112" width="160" height="45" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)"/>
+  <text x="300" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#4fc3f7">iron gen controller</text>
+  <text x="300" y="148" text-anchor="middle" font-size="9" fill="#aaa">PLC + HMI scaffold</text>
+
+  <rect x="390" y="112" width="160" height="45" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)"/>
+  <text x="470" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#4fc3f7">iron deploy edge-01</text>
+  <text x="470" y="148" text-anchor="middle" font-size="9" fill="#aaa">OTA через Nerves</text>
+
+  <rect x="560" y="112" width="130" height="45" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)"/>
+  <text x="625" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#4fc3f7">Git + CI/CD</text>
+  <text x="625" y="148" text-anchor="middle" font-size="9" fill="#aaa">IaC, версионирование</text>
+
+  <rect x="700" y="112" width="155" height="45" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)"/>
+  <text x="778" y="133" text-anchor="middle" font-size="11" font-weight="600" fill="#4fc3f7">iron test --sim</text>
+  <text x="778" y="148" text-anchor="middle" font-size="9" fill="#aaa">SIL / HIL тестирование</text>
+
+  <text x="450" y="200" text-anchor="middle" font-size="10" fill="#888">YAML/TOML конфиги · Mix tasks · Hex packages как "гемы" для протоколов</text>
+
+  <!-- LAYER 4: HMI / Visualization -->
+  <rect x="30" y="225" width="840" height="145" rx="12" fill="url(#layer4)" filter="url(#shadow)" opacity="0.95"/>
+  <text x="50" y="250" font-size="11" font-weight="700" fill="#e94560" letter-spacing="2">LAYER 4</text>
+  <text x="140" y="250" font-size="14" font-weight="700" fill="#fff">HMI / Визуализация — 90% LiveView, 10% React (только SVG редактор)</text>
+
+  <rect x="50" y="265" width="190" height="50" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)"/>
+  <text x="145" y="285" text-anchor="middle" font-size="12" font-weight="600" fill="#81c784">Phoenix LiveView</text>
+  <text x="145" y="300" text-anchor="middle" font-size="9" fill="#aaa">Real-time HMI, 0 JS</text>
+
+  <rect x="250" y="265" width="170" height="50" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)"/>
+  <text x="335" y="285" text-anchor="middle" font-size="12" font-weight="600" fill="#81c784">SVG Process Graphics</text>
+  <text x="335" y="300" text-anchor="middle" font-size="9" fill="#aaa">Мнемосхемы (React island)</text>
+
+  <rect x="430" y="265" width="150" height="50" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)"/>
+  <text x="505" y="285" text-anchor="middle" font-size="12" font-weight="600" fill="#81c784">LiveView Charts</text>
+  <text x="505" y="300" text-anchor="middle" font-size="9" fill="#aaa">Тренды, аналитика</text>
+
+  <rect x="590" y="265" width="130" height="50" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)"/>
+  <text x="655" y="285" text-anchor="middle" font-size="12" font-weight="600" fill="#81c784">PWA + Mobile</text>
+  <text x="655" y="300" text-anchor="middle" font-size="9" fill="#aaa">Offline, push alerts</text>
+
+  <rect x="730" y="265" width="125" height="50" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)"/>
+  <text x="793" y="285" text-anchor="middle" font-size="12" font-weight="600" fill="#81c784">Grafana</text>
+  <text x="793" y="300" text-anchor="middle" font-size="9" fill="#aaa">Дашборды, KPI</text>
+
+  <text x="450" y="355" text-anchor="middle" font-size="10" fill="#888">WebSocket / LiveView channels · Responsive · Drag-and-drop конфигуратор мнемосхем</text>
+
+  <!-- LAYER 3: SCADA Server -->
+  <rect x="30" y="380" width="840" height="170" rx="12" fill="url(#layer3)" filter="url(#shadow)" opacity="0.95"/>
+  <text x="50" y="405" font-size="11" font-weight="700" fill="#e94560" letter-spacing="2">LAYER 3</text>
+  <text x="140" y="405" font-size="14" font-weight="700" fill="#fff">SCADA Server — Elixir/Phoenix (BEAM VM)</text>
+
+  <rect x="50" y="420" width="175" height="55" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(233,69,96,0.4)"/>
+  <text x="138" y="440" text-anchor="middle" font-size="11" font-weight="600" fill="#ff8a65">Supervision Trees</text>
+  <text x="138" y="455" text-anchor="middle" font-size="9" fill="#ccc">1 GenServer = 1 устройство</text>
+  <text x="138" y="467" text-anchor="middle" font-size="9" fill="#ccc">Авто-перезапуск при сбое</text>
+
+  <rect x="235" y="420" width="155" height="55" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(233,69,96,0.4)"/>
+  <text x="313" y="440" text-anchor="middle" font-size="11" font-weight="600" fill="#ff8a65">Alarm Engine</text>
+  <text x="313" y="455" text-anchor="middle" font-size="9" fill="#ccc">ISA-18.2 аларминг</text>
+  <text x="313" y="467" text-anchor="middle" font-size="9" fill="#ccc">Эскалация, подтверждение</text>
+
+  <rect x="400" y="420" width="160" height="55" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(233,69,96,0.4)"/>
+  <text x="480" y="440" text-anchor="middle" font-size="11" font-weight="600" fill="#ff8a65">Historian</text>
+  <text x="480" y="455" text-anchor="middle" font-size="9" fill="#ccc">PostgreSQL + TimescaleDB</text>
+  <text x="480" y="467" text-anchor="middle" font-size="9" fill="#ccc">Сжатие, агрегаты</text>
+
+  <rect x="570" y="420" width="145" height="55" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(233,69,96,0.4)"/>
+  <text x="643" y="440" text-anchor="middle" font-size="11" font-weight="600" fill="#ff8a65">RBAC + Audit</text>
+  <text x="643" y="455" text-anchor="middle" font-size="9" fill="#ccc">Оператор / Инженер / Admin</text>
+  <text x="643" y="467" text-anchor="middle" font-size="9" fill="#ccc">Полный журнал действий</text>
+
+  <rect x="725" y="420" width="130" height="55" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(233,69,96,0.4)"/>
+  <text x="790" y="440" text-anchor="middle" font-size="11" font-weight="600" fill="#ff8a65">Recipe Mgmt</text>
+  <text x="790" y="455" text-anchor="middle" font-size="9" fill="#ccc">ISA-88 рецептуры</text>
+  <text x="790" y="467" text-anchor="middle" font-size="9" fill="#ccc">Batch control</text>
+
+  <text x="450" y="535" text-anchor="middle" font-size="10" fill="#ddd">Hot code reload · Distributed Erlang кластер · ETS/Mnesia для кэша · Broadway для потоков данных</text>
+
+  <!-- LAYER 2: Edge Gateway -->
+  <rect x="30" y="560" width="840" height="145" rx="12" fill="url(#layer2)" filter="url(#shadow)" opacity="0.95"/>
+  <text x="50" y="585" font-size="11" font-weight="700" fill="#fff" letter-spacing="2">LAYER 2</text>
+  <text x="140" y="585" font-size="14" font-weight="700" fill="#fff">Edge Gateway — Rust Agent + Nerves</text>
+
+  <rect x="50" y="600" width="180" height="50" rx="6" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.25)"/>
+  <text x="140" y="620" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">Protocol Translation</text>
+  <text x="140" y="635" text-anchor="middle" font-size="9" fill="#ddd">Modbus · OPC-UA · S7 · MQTT</text>
+
+  <rect x="240" y="600" width="165" height="50" rx="6" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.25)"/>
+  <text x="323" y="620" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">Store &amp; Forward</text>
+  <text x="323" y="635" text-anchor="middle" font-size="9" fill="#ddd">SQLite буфер при потере связи</text>
+
+  <rect x="415" y="600" width="155" height="50" rx="6" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.25)"/>
+  <text x="493" y="620" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">OTA Updates</text>
+  <text x="493" y="635" text-anchor="middle" font-size="9" fill="#ddd">A/B иммутабельные образы</text>
+
+  <rect x="580" y="600" width="140" height="50" rx="6" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.25)"/>
+  <text x="650" y="620" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">Deadband Filter</text>
+  <text x="650" y="635" text-anchor="middle" font-size="9" fill="#ddd">−90% трафика до сервера</text>
+
+  <rect x="730" y="600" width="125" height="50" rx="6" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.25)"/>
+  <text x="793" y="620" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">VPN/WireGuard</text>
+  <text x="793" y="635" text-anchor="middle" font-size="9" fill="#ddd">Безопасный туннель</text>
+
+  <text x="450" y="693" text-anchor="middle" font-size="10" fill="#ddd">Rust Agent · GOOD/UNCERTAIN/BAD качество данных · Автономная работа при потере связи</text>
+
+  <!-- LAYER 1: PLC Runtime -->
+  <rect x="30" y="710" width="840" height="155" rx="12" fill="url(#layer1)" filter="url(#shadow)" opacity="0.95"/>
+  <text x="50" y="735" font-size="11" font-weight="700" fill="#fff" letter-spacing="2">LAYER 1</text>
+  <text x="140" y="735" font-size="14" font-weight="700" fill="#fff">PLC Runtime — Rust + Linux PREEMPT_RT</text>
+
+  <rect x="50" y="750" width="170" height="55" rx="6" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)"/>
+  <text x="135" y="770" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">Rust PLC Engine</text>
+  <text x="135" y="785" text-anchor="middle" font-size="9" fill="#eee">Детерминистичный цикл</text>
+  <text x="135" y="797" text-anchor="middle" font-size="9" fill="#eee">1–10ms scan time</text>
+
+  <rect x="230" y="750" width="165" height="55" rx="6" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)"/>
+  <text x="313" y="770" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">ST → Rust Compiler</text>
+  <text x="313" y="785" text-anchor="middle" font-size="9" fill="#eee">IEC 61131-3 ST</text>
+  <text x="313" y="797" text-anchor="middle" font-size="9" fill="#eee">компиляция в native</text>
+
+  <rect x="405" y="750" width="155" height="55" rx="6" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)"/>
+  <text x="483" y="770" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">I/O Drivers</text>
+  <text x="483" y="785" text-anchor="middle" font-size="9" fill="#eee">Modbus · EtherCAT</text>
+  <text x="483" y="797" text-anchor="middle" font-size="9" fill="#eee">CANopen · PROFINET</text>
+
+  <rect x="570" y="750" width="140" height="55" rx="6" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)"/>
+  <text x="640" y="770" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">OPC-UA Server</text>
+  <text x="640" y="785" text-anchor="middle" font-size="9" fill="#eee">open62541 via FFI</text>
+  <text x="640" y="797" text-anchor="middle" font-size="9" fill="#eee">Стандартный интерфейс</text>
+
+  <rect x="720" y="750" width="135" height="55" rx="6" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)"/>
+  <text x="788" y="770" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">Safety Layer</text>
+  <text x="788" y="785" text-anchor="middle" font-size="9" fill="#eee">Watchdog · Heartbeat</text>
+  <text x="788" y="797" text-anchor="middle" font-size="9" fill="#eee">Graceful degradation</text>
+
+  <text x="450" y="850" text-anchor="middle" font-size="10" fill="#ddd">RevPi · BeagleBone · Industrial RPi · x86 IPC · Без GC = предсказуемые задержки</text>
+
+  <!-- Communication protocols bar -->
+  <rect x="30" y="875" width="840" height="45" rx="8" fill="rgba(76,175,80,0.15)" stroke="rgba(76,175,80,0.4)"/>
+  <text x="450" y="895" text-anchor="middle" font-size="11" font-weight="600" fill="#81c784">Протоколы: MQTT · OPC-UA · Modbus TCP/RTU · S7 · NATS · EtherCAT · DNP3 · BACnet</text>
+  <text x="450" y="910" text-anchor="middle" font-size="10" fill="#aaa">TLS повсюду · mTLS между нодами · Certificate-based device auth</text>
+
+  <!-- Hardware targets -->
+  <rect x="30" y="930" width="840" height="40" rx="8" fill="rgba(255,152,0,0.12)" stroke="rgba(255,152,0,0.35)"/>
+  <text x="450" y="955" text-anchor="middle" font-size="11" font-weight="600" fill="#ffb74d">Hardware: RevPi Connect · BeagleBone AI · Raspberry Pi CM4 Industrial · x86 IPC · Any ARM64/x86</text>
+
+  <!-- Arrows between layers -->
+  <line x1="450" y1="215" x2="450" y2="225" stroke="#666" stroke-width="1.5" stroke-dasharray="4"/>
+  <line x1="450" y1="370" x2="450" y2="380" stroke="#666" stroke-width="1.5" stroke-dasharray="4"/>
+  <line x1="450" y1="550" x2="450" y2="560" stroke="#666" stroke-width="1.5" stroke-dasharray="4"/>
+  <line x1="450" y1="700" x2="450" y2="710" stroke="#666" stroke-width="1.5" stroke-dasharray="4"/>
+
+  <!-- Scale labels -->
+  <text x="450" y="990" text-anchor="middle" font-size="13" font-weight="700" fill="#ccc">Ферма (1 нода) → Завод (кластер) → Холдинг (федерация)</text>
+  <text x="450" y="1010" text-anchor="middle" font-size="10" fill="#888">Одна кодовая база · Масштабирование добавлением нод · Distributed Erlang</text>
+</svg>

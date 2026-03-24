@@ -49,6 +49,16 @@ you change one line in `config/tags.yaml`.
 Every interaction with IRON goes through a single CLI. No GUI configuration tools
 that only run on Windows. No vendor-specific IDEs.
 
+Deployment uses [Kamal 2](https://kamal-deploy.org) under the hood —
+the same tool that deploys Rails applications at Basecamp and GitHub.
+`iron deploy` is a thin wrapper that configures Kamal for IRON's two-container
+architecture (iron-web + iron-core) and handles ARM64 cross-compilation
+for edge devices automatically.
+
+Default target is a local server on the plant network — a $150 mini-PC
+or any existing Linux machine. Cloud deployment is optional.
+Same command, same config, different IP. Full guide: [docs/deployment.md](../docs/deployment.md).
+
 ```bash
 # New project
 iron new myplant
@@ -71,19 +81,23 @@ iron validate
 # Generate object scaffolding (tags + dashboard + alarms)
 iron generate object reactor_01 --template chemical_reactor
 
-# Deploy to edge device
-iron deploy --target edge-01.local
-# Compiling Rust agent...  done (23s)
-# Uploading configuration... done
-# ✅ 47 tags active, real data flowing
-# Dashboard: http://myplant.local:4000
+# Deploy to cloud (Hetzner VPS) — zero downtime, SSL automatic
+iron deploy --target cloud
+# Building image...          done
+# Pushing to registry...     done
+# Running migrations...      done (backwards-compatible)
+# Starting new container...  done (health check passed)
+# ✅ iron 0.3.0 live at https://myplant.example.com
 
-# Upgrade
-iron upgrade
-# Backing up current config...
-# Downloading iron 0.8.0...
-# Running migrations...
-# ✅ Upgraded from 0.7.2 to 0.8.0
+# Deploy edge agent to Raspberry Pi in OT network
+iron deploy --target edge-01
+# Pushing ARM64 image...     done
+# Restarting edge agent...   done (4s, SQLite buffer preserved)
+# ✅ 47 tags active, real data flowing
+
+# Upgrade is the same command — previous version keeps running
+# until the new one passes health checks
+iron deploy --target cloud
 ```
 
 ---
