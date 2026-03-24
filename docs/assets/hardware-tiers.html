@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRON — Hardware Tiers</title>
+<style>
+  :root {
+    --bg1: #ffffff; --bg2: #f5f5f0; --text1: #1a1a1a; --text2: #6b6b6b; --border: rgba(0,0,0,0.12);
+    --info: #185FA5; --success: #3B6D11; --warning: #854F0B; --danger: #A32D2D;
+    --bg-info: #E6F1FB; --bg-success: #EAF3DE; --bg-warning: #FAEEDA; --bg-danger: #FCEBEB;
+    --radius: 12px; --radius-sm: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg1: #1a1a1a; --bg2: #2a2a2a; --text1: #e0e0e0; --text2: #999; --border: rgba(255,255,255,0.12);
+      --info: #85B7EB; --success: #97C459; --warning: #FAC775; --danger: #F09595;
+      --bg-info: #042C53; --bg-success: #173404; --bg-warning: #412402; --bg-danger: #501313;
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg1); color: var(--text1); padding: 24px; max-width: 800px; margin: 0 auto; }
+  .tier { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 12px; }
+  .tier-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+  .tier-name { font-size: 16px; font-weight: 500; }
+  .tier-price { font-size: 13px; color: var(--text2); }
+  .hw-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 8px; }
+  @media (max-width: 600px) { .hw-grid { grid-template-columns: 1fr; } }
+  .hw-card { background: var(--bg1); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; }
+  .hw-name { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .hw-detail { font-size: 12px; color: var(--text2); line-height: 1.6; }
+  .hw-price { font-size: 12px; font-weight: 500; color: var(--info); margin-top: 4px; }
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: var(--radius-sm); margin-right: 4px; margin-bottom: 4px; }
+  .b-green { background: var(--bg-success); color: var(--success); }
+  .b-amber { background: var(--bg-warning); color: var(--warning); }
+  .b-blue { background: var(--bg-info); color: var(--info); }
+  .b-red { background: var(--bg-danger); color: var(--danger); }
+  .role { font-size: 12px; color: var(--text2); margin-top: 8px; padding-top: 8px; border-top: 0.5px solid var(--border); line-height: 1.6; }
+  .io-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  h2 { font-size: 18px; font-weight: 500; margin: 0 0 4px; }
+  p.sub { font-size: 13px; color: var(--text2); margin: 0 0 16px; }
+  .cfg { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 10px; }
+  .cfg-title { font-size: 15px; font-weight: 500; margin-bottom: 10px; }
+  .cfg-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr); gap: 8px; }
+  @media (max-width: 600px) { .cfg-grid { grid-template-columns: 1fr; } }
+  .io-box { background: var(--bg1); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; }
+  .io-type { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
+  .io-spec { font-size: 11px; color: var(--text2); line-height: 1.6; }
+  .total-row { margin-top: 10px; font-size: 13px; color: var(--text2); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
+  .example { font-size: 12px; color: var(--text2); margin-top: 8px; padding-top: 8px; border-top: 0.5px solid var(--border); line-height: 1.6; }
+  code { background: var(--bg1); border: 0.5px solid var(--border); padding: 2px 6px; border-radius: 4px; font-size: 11px; font-family: ui-monospace, monospace; }
+  .section-break { margin: 28px 0 16px; }
+</style>
+</head>
+<body>
+
+<h2>Рекомендованное железо для IRON по уровням</h2>
+<p class="sub">4 уровня — от DIY-фермера до крупного завода. Одна архитектура, разное железо.</p>
+
+<!-- TIER 1 -->
+<div class="tier" style="border-left: 3px solid #97C459;">
+  <div class="tier-head">
+    <span class="tier-name">Уровень 1 — Starter (ферма, дом, гараж)</span>
+    <span class="tier-price">$50 — $300</span>
+  </div>
+  <div class="hw-grid">
+    <div class="hw-card">
+      <div class="hw-name">Raspberry Pi 5 + HAT</div>
+      <div class="hw-detail">
+        Quad-core A76 2.4 GHz, 4/8 GB RAM<br>
+        Nerves firmware, GPIO + HAT для I/O<br>
+        Waveshare Industrial HAT: 8DI/4DO/4AI
+      </div>
+      <div class="hw-price">RPi ~$60 + HAT ~$40 = ~$100</div>
+      <div class="io-row">
+        <span class="badge b-green">Nerves</span>
+        <span class="badge b-green">Modbus RTU</span>
+        <span class="badge b-green">WiFi/BLE</span>
+      </div>
+    </div>
+    <div class="hw-card">
+      <div class="hw-name">Industrial Shields ESP32 PLC</div>
+      <div class="hw-detail">
+        ESP32 в DIN-рейковом корпусе<br>
+        10-58 I/O, Modbus RTU/TCP<br>
+        Arduino IDE + IRON bridge
+      </div>
+      <div class="hw-price">$80 — $250</div>
+      <div class="io-row">
+        <span class="badge b-green">DIN-рейка</span>
+        <span class="badge b-green">WiFi</span>
+        <span class="badge b-amber">Без Linux</span>
+      </div>
+    </div>
+    <div class="hw-card">
+      <div class="hw-name">Arduino Opta (Finder)</div>
+      <div class="hw-detail">
+        STM32H7 + ESP32-S3 WiFi/BLE<br>
+        8DI, 4 реле, RS-485, Modbus<br>
+        IEC 61131-3 через Arduino PLC IDE
+      </div>
+      <div class="hw-price">$100 — $170</div>
+      <div class="io-row">
+        <span class="badge b-green">DIN-рейка</span>
+        <span class="badge b-green">Micro PLC</span>
+        <span class="badge b-amber">Ограниченные I/O</span>
+      </div>
+    </div>
+    <div class="hw-card">
+      <div class="hw-name">NORVI ESP32 Industrial</div>
+      <div class="hw-detail">
+        ESP32-S3, DIN-рейка, RS-485<br>
+        Модульные расширения I/O<br>
+        LoRa/NB-IoT варианты
+      </div>
+      <div class="hw-price">$50 — $150</div>
+      <div class="io-row">
+        <span class="badge b-green">Бюджетный</span>
+        <span class="badge b-green">IoT-ready</span>
+        <span class="badge b-amber">Нет Linux</span>
+      </div>
+    </div>
+  </div>
+  <div class="role">
+    <strong>Роль в IRON:</strong> I/O нода (Modbus slave) → связь с Edge Gateway по Modbus RTU/TCP или MQTT. RPi 5 может быть all-in-one: PLC runtime + Edge + HMI на одном устройстве.
+  </div>
+</div>
+
+<!-- TIER 2 -->
+<div class="tier" style="border-left: 3px solid #5DCAA5;">
+  <div class="tier-head">
+    <span class="tier-name">Уровень 2 — Professional (малое производство, водоканал)</span>
+    <span class="tier-price">$200 — $800</span>
+  </div>
+  <div class="hw-grid">
+    <div class="hw-card">
+      <div class="hw-name">RevPi Connect 5 (KUNBUS)</div>
+      <div class="hw-detail">
+        CM5, A76 2.4 GHz, до 8 GB RAM<br>
+        2x GbE, RS-485, CAN FD, TPM 2.0<br>
+        До 10 модулей I/O на PiBridge<br>
+        EN 61131-2, EMC IEC 61000
+      </div>
+      <div class="hw-price">~$350 — $500 (+ I/O модули)</div>
+      <div class="io-row">
+        <span class="badge b-blue">Флагман</span>
+        <span class="badge b-green">Nerves-ready</span>
+        <span class="badge b-green">Сертифицирован</span>
+      </div>
+    </div>
+    <div class="hw-card">
+      <div class="hw-name">Unipi Patron S207 / M567</div>
+      <div class="hw-detail">
+        NXP i.MX 8M Mini, 1.8 GHz, 1 GB<br>
+        eMMC 8 GB, RS-485, 1-Wire<br>
+        Встроенные DI/DO/AI/AO/реле<br>
+        Linux, Mervis SCADA включена
+      </div>
+      <div class="hw-price">$300 — $700</div>
+      <div class="io-row">
+        <span class="badge b-blue">All-in-one</span>
+        <span class="badge b-green">Linux</span>
+        <span class="badge b-green">Встроенные I/O</span>
+      </div>
+    </div>
+    <div class="hw-card">
+      <div class="hw-name">Unipi Neuron L533 / M523</div>
+      <div class="hw-detail">
+        Raspberry Pi CM4 внутри<br>
+        До 56 DI + 14 AI + 14 AO + реле<br>
+        RS-485 x2, 1-Wire, Linux<br>
+        Отлично для HVAC и водоканалов
+      </div>
+      <div class="hw-price">$250 — $500</div>
+      <div class="io-row">
+        <span class="badge b-green">Много I/O</span>
+        <span class="badge b-green">Nerves-ready</span>
+        <span class="badge b-green">OEM-кастом</span>
+      </div>
+    </div>
+    <div class="hw-card">
+      <div class="hw-name">RevPi Core S + DIO/AIO модули</div>
+      <div class="hw-detail">
+        CM4, компактный корпус<br>
+        DIO: 16 DI + 16 DO (24V)<br>
+        AIO: 4 AI + 2 AO (0-10V / 4-20mA)<br>
+        Модульная сборка на PiBridge
+      </div>
+      <div class="hw-price">$200 — $450</div>
+      <div class="io-row">
+        <span class="badge b-green">Модульный</span>
+        <span class="badge b-green">24V I/O</span>
+        <span class="badge b-green">Made in Germany</span>
+      </div>
+    </div>
+  </div>
+  <div class="role">
+    <strong>Роль в IRON:</strong> Edge Gateway + PLC Runtime. Полный стек Nerves + Rust PLC engine. Store-and-forward при потере связи. OTA обновления. Локальный HMI через HDMI тачскрин или браузер.
+  </div>
+</div>
+
+<!-- TIER 3 -->
+<div class="tier" style="border-left: 3px solid #7F77DD;">
+  <div class="tier-head">
+    <span class="tier-name">Уровень 3 — Industrial (средний завод, пищёвка)</span>
+    <span class="tier-price">$500 — $3,000</span>
+  </div>
+  <div class="hw-grid">
+    <div class="hw-card">
+      <div class="hw-name">WAGO PFC200 (750-8202)</div>
+      <div class="hw-detail">
+        ARM Cortex-A7, Linux RT, CODESYS V3<br>
+        2x Ethernet, RS-232/485, CAN<br>
+        750-серия I/O: сотни модулей<br>
+        OPC-UA, MQTT, Docker-контейнеры
+      </div>
+      <div class="hw-price">$800 — $1,200 (+ I/O модули)</div>
+      <div class="io-row">
+        <span class="badge b-blue">Linux + CODESYS</span>
+        <span class="badge b-green">Docker</span>
+        <span class="badge b-green">OPC-UA</span>
+      </div>
+    </div>
+    <div class="hw-card">
+      <div class="hw-name">WAGO CC100 (751-9301)</div>
+      <div class="hw-detail">
+        Compact Controller, Linux, Docker<br>
+        2x Ethernet, 8 DI, 4 DO, 2 AI<br>
+        CODESYS + Node-RED + Docker<br>
+        Компактный, встроенные I/O
+      </div>
+      <div class="hw-price">$500 — $700</div>
+      <div class="io-row">
+        <span class="badge b-blue">Компактный</span>
+        <span class="badge b-green">Docker</span>
+        <span class="badge b-green">Linux</span>
+      </div>
+    </div>
+    <div class="hw-card">
+      <div class="hw-name">BeagleBone Black Industrial + Capes</div>
+      <div class="hw-detail">
+        AM3358 Cortex-A8, PRU-ICSS<br>
+        PRU = hard real-time сопроцессор<br>
+        -40°C..+85°C, индустриальный<br>
+        EtherCAT через PRU возможен
+      </div>
+      <div class="hw-price">$70 (плата) + $200-500 (capes/корпус)</div>
+      <div class="io-row">
+        <span class="badge b-blue">PRU real-time</span>
+        <span class="badge b-green">EtherCAT</span>
+        <span class="badge b-amber">Нужен корпус</span>
+      </div>
+    </div>
+    <div class="hw-card">
+      <div class="hw-name">x86 IPC (OnLogic, Advantech)</div>
+      <div class="hw-detail">
+        Intel N100/i3, 8-16 GB RAM, SSD<br>
+        Fanless, DIN-рейка, -20..+60°C<br>
+        2+ GbE, RS-485, GPIO опционально<br>
+        SCADA-сервер + Historian
+      </div>
+      <div class="hw-price">$400 — $1,500</div>
+      <div class="io-row">
+        <span class="badge b-blue">SCADA сервер</span>
+        <span class="badge b-green">x86 мощь</span>
+        <span class="badge b-green">PostgreSQL</span>
+      </div>
+    </div>
+  </div>
+  <div class="role">
+    <strong>Роль в IRON:</strong> Разделение: WAGO/BeagleBone как PLC-контроллеры (Rust runtime + fieldbus I/O) → x86 IPC как SCADA-сервер (Elixir/Phoenix + TimescaleDB + HMI). Связь по OPC-UA или MQTT.
+  </div>
+</div>
+
+<!-- TIER 4 -->
+<div class="tier" style="border-left: 3px solid #D85A30;">
+  <div class="tier-head">
+    <span class="tier-name">Уровень 4 — Enterprise (крупный завод, интеграция)</span>
+    <span class="tier-price">$2,000 — $20,000+</span>
+  </div>
+  <div class="hw-grid">
+    <div class="hw-card">
+      <div class="hw-name">Siemens S7-1200/1500 (существующие)</div>
+      <div class="hw-detail">
+        Не заменяем — интегрируем!<br>
+        IRON как SCADA-надстройка<br>
+        Данные через OPC-UA сервер S7<br>
+        Сохраняем все сертификации
+      </div>
+      <div class="hw-price">Существующее оборудование</div>
+      <div class="io-row">
+        <span class="badge b-red">Не заменяем</span>
+        <span class="badge b-blue">OPC-UA интеграция</span>
+      </div>
+    </div>
+    <div class="hw-card">
+      <div class="hw-name">Allen-Bradley / Rockwell (существующие)</div>
+      <div class="hw-detail">
+        CompactLogix, ControlLogix<br>
+        IRON через EtherNet/IP<br>
+        или OPC-UA Gateway<br>
+        Замена дорогого FactoryTalk
+      </div>
+      <div class="hw-price">Существующее оборудование</div>
+      <div class="io-row">
+        <span class="badge b-red">Не заменяем</span>
+        <span class="badge b-blue">Gateway</span>
+      </div>
+    </div>
+    <div class="hw-card">
+      <div class="hw-name">x86 Edge Server (Dell/HPE/Supermicro)</div>
+      <div class="hw-detail">
+        Xeon/i5, 32-64 GB, SSD RAID<br>
+        Fanless industrial или 1U rack<br>
+        Elixir кластер (2-3 ноды)<br>
+        TimescaleDB + Grafana
+      </div>
+      <div class="hw-price">$2,000 — $8,000</div>
+      <div class="io-row">
+        <span class="badge b-blue">Кластер</span>
+        <span class="badge b-green">HA</span>
+        <span class="badge b-green">Historian</span>
+      </div>
+    </div>
+    <div class="hw-card">
+      <div class="hw-name">WAGO PFC200 как Gateway</div>
+      <div class="hw-detail">
+        Protocol translator между<br>
+        старыми PLC и IRON SCADA<br>
+        PROFIBUS → OPC-UA/MQTT<br>
+        MPI → Ethernet bridge
+      </div>
+      <div class="hw-price">$800 — $2,000</div>
+      <div class="io-row">
+        <span class="badge b-blue">Мост</span>
+        <span class="badge b-green">PROFIBUS</span>
+        <span class="badge b-green">OPC-UA</span>
+      </div>
+    </div>
+  </div>
+  <div class="role">
+    <strong>Роль в IRON:</strong> НЕ заменяем существующие PLC! IRON работает как SCADA/Historian/Analytics поверх Siemens/AB/Schneider через OPC-UA. Замена дорогого WinCC/FactoryTalk/Wonderware.
+  </div>
+</div>
+
+<div class="section-break"></div>
+
+<h2>Референсные конфигурации I/O для типовых объектов</h2>
+<p class="sub">Что конкретно купить для каждого сценария — железо + I/O + цена</p>
+
+<div class="cfg">
+  <div class="cfg-title">Теплица / малая ферма</div>
+  <div class="cfg-grid">
+    <div class="io-box">
+      <div class="io-type" style="color: var(--success);">AI (аналоговые входы)</div>
+      <div class="io-spec">
+        4x 4-20mA / 0-10V<br>
+        Температура (PT100/NTC)<br>
+        Влажность почвы<br>
+        Уровень CO2<br>
+        Давление воды
+      </div>
+    </div>
+    <div class="io-box">
+      <div class="io-type" style="color: var(--info);">DI (дискретные входы)</div>
+      <div class="io-spec">
+        8x 24VDC<br>
+        Концевики (окна/форточки)<br>
+        Поплавковые датчики уровня<br>
+        Кнопки аварийного стопа<br>
+        Датчики движения
+      </div>
+    </div>
+    <div class="io-box">
+      <div class="io-type" style="color: var(--warning);">DO / AO (выходы)</div>
+      <div class="io-spec">
+        4x реле (насос, вентиляция)<br>
+        2x 0-10V (частотник привод)<br>
+        Электромагн. клапаны полива<br>
+        Управление отоплением
+      </div>
+    </div>
+  </div>
+  <div class="total-row">
+    <span>Железо: RPi 5 + Waveshare HAT или Unipi Neuron S103</span>
+    <span style="font-weight: 500;">$100 — $300</span>
+  </div>
+  <div class="example">
+    Команда: <code>iron new greenhouse --profile small_farm --io 4ai:4-20mA 8di:24v 4do:relay 2ao:0-10v</code>
+  </div>
+</div>
+
+<div class="cfg">
+  <div class="cfg-title">Насосная станция / водоканал</div>
+  <div class="cfg-grid">
+    <div class="io-box">
+      <div class="io-type" style="color: var(--success);">AI (аналоговые входы)</div>
+      <div class="io-spec">
+        8x 4-20mA<br>
+        Давление на входе/выходе<br>
+        Расход (расходомер)<br>
+        Уровень в резервуаре<br>
+        Токи двигателей (ТТ)<br>
+        Вибрация подшипников
+      </div>
+    </div>
+    <div class="io-box">
+      <div class="io-type" style="color: var(--info);">DI (дискретные входы)</div>
+      <div class="io-spec">
+        16x 24VDC<br>
+        Состояние автоматов/контакторов<br>
+        Тепловые реле (перегрузка)<br>
+        Аварийный стоп<br>
+        Затопление машзала<br>
+        Двери/охранная сигнализация
+      </div>
+    </div>
+    <div class="io-box">
+      <div class="io-type" style="color: var(--warning);">DO / AO (выходы)</div>
+      <div class="io-spec">
+        8x DO (контакторы насосов)<br>
+        4x AO 4-20mA (частотники)<br>
+        Управление задвижками<br>
+        Сирена аварии<br>
+        Управление дозированием
+      </div>
+    </div>
+  </div>
+  <div class="total-row">
+    <span>Железо: RevPi Connect 5 + DIO + AIO модули</span>
+    <span style="font-weight: 500;">$500 — $900</span>
+  </div>
+  <div class="example">
+    Команда: <code>iron new pump_station --profile water_utility --io 8ai:4-20mA 16di:24v 8do:24v 4ao:4-20mA</code>
+  </div>
+</div>
+
+<div class="cfg">
+  <div class="cfg-title">Пищевое производство (линия розлива)</div>
+  <div class="cfg-grid">
+    <div class="io-box">
+      <div class="io-type" style="color: var(--success);">AI (аналоговые входы)</div>
+      <div class="io-spec">
+        16x 4-20mA / PT100<br>
+        Температура продукта<br>
+        Температура пастеризации<br>
+        Давление в трубопроводе<br>
+        Расход, уровень в танках<br>
+        pH, проводимость
+      </div>
+    </div>
+    <div class="io-box">
+      <div class="io-type" style="color: var(--info);">DI (дискретные входы)</div>
+      <div class="io-spec">
+        32x 24VDC<br>
+        Фотодатчики (бутылки на конвейере)<br>
+        Энкодеры (скорость линии)<br>
+        Состояние клапанов (обратная связь)<br>
+        Блокировки безопасности<br>
+        Уровни: верхний/нижний
+      </div>
+    </div>
+    <div class="io-box">
+      <div class="io-type" style="color: var(--warning);">DO / AO (выходы)</div>
+      <div class="io-spec">
+        16x DO (клапаны, контакторы)<br>
+        8x AO (частотники, регуляторы)<br>
+        Пневмоклапаны (через DO)<br>
+        Управление конвейерами<br>
+        Дозирующие насосы
+      </div>
+    </div>
+  </div>
+  <div class="total-row">
+    <span>Железо: WAGO PFC200 + 750-серия I/O или RevPi Connect 5 + расширения</span>
+    <span style="font-weight: 500;">$1,500 — $4,000</span>
+  </div>
+  <div class="example">
+    Команда: <code>iron new bottling_line --profile food_mfg --io 16ai:4-20mA 32di:24v 16do:24v 8ao:4-20mA --fieldbus ethercat</code>
+  </div>
+</div>
+
+<div class="cfg">
+  <div class="cfg-title">Крупный завод — SCADA-надстройка над Siemens/AB</div>
+  <div class="cfg-grid">
+    <div class="io-box">
+      <div class="io-type" style="color: var(--success);">Входные данные</div>
+      <div class="io-spec">
+        OPC-UA клиент → S7-1500<br>
+        OPC-UA клиент → CompactLogix<br>
+        MQTT от edge-шлюзов<br>
+        Modbus TCP от старых PLC<br>
+        1000+ тегов
+      </div>
+    </div>
+    <div class="io-box">
+      <div class="io-type" style="color: var(--info);">SCADA сервер</div>
+      <div class="io-spec">
+        x86 IPC или rack сервер<br>
+        Elixir/Phoenix кластер<br>
+        TimescaleDB (100K+ точек/с)<br>
+        Grafana дашборды<br>
+        Redundancy 2N
+      </div>
+    </div>
+    <div class="io-box">
+      <div class="io-type" style="color: var(--warning);">Выходы и HMI</div>
+      <div class="io-spec">
+        LiveView HMI в любом браузере<br>
+        Мобильные уведомления<br>
+        Отчёты в PDF/email<br>
+        REST API для MES/ERP<br>
+        Историан для предиктивки
+      </div>
+    </div>
+  </div>
+  <div class="total-row">
+    <span>Железо: x86 IPC (Advantech/OnLogic) + WAGO gateway + существующие PLC</span>
+    <span style="font-weight: 500;">$3,000 — $15,000</span>
+  </div>
+  <div class="example">
+    Команда: <code>iron new steel_plant --profile enterprise_scada --connect opc-ua://10.0.1.50 mqtt://edge-gw-01</code>
+  </div>
+</div>
+
+</body>
+</html>

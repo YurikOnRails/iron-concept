@@ -336,7 +336,7 @@ Architecture decisions, philosophy, and business model are documented as RFCs:
 | [0006](rfcs/0006-roadmap.md) | Roadmap | Phases 0–4, funding strategy, build-in-public playbook |
 
 **Supporting docs:**
-[Deployment Guide](docs/deployment.md) · [Testing Guide](docs/testing.md) · [Economic Impact](docs/economics.md) · [Hardware Reference](docs/hardware.md)
+[Deployment Guide](docs/deployment.md) · [Testing Guide](docs/testing.md) · [TDD Guide](docs/tdd.md) · [Spec-Driven Development](docs/spec-driven.md) · [Hardware Selection](docs/hardware-selection.md) · [Hardware Reference](docs/hardware.md) · [Economic Impact](docs/economics.md)
 
 ---
 
